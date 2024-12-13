@@ -1,0 +1,26 @@
+name: Unzip and Commit
+
+on:
+  push:
+    paths:
+      - '**.zip'  # ZIPファイルがプッシュされたときに実行される
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest  # Linux環境で実行
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2  # リポジトリの内容をチェックアウト
+
+    - name: Extract ZIP file
+      run: |
+        unzip browser_20241211_22126.zip -d extracted_files  # ZIPファイルを解凍
+
+    - name: Commit extracted files
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add .
+        git commit -m "Extract ZIP file"
+        git push

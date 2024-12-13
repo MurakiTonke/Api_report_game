@@ -14,10 +14,16 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    # extracted_filesディレクトリが存在しない場合に作成
+    - name: Create extracted_files directory if it doesn't exist
+      run: |
+        if [ ! -d "extracted_files" ]; then
+          mkdir extracted_files
+        fi
+
     # ZIPファイルを解凍する
     - name: Extract ZIP file
       run: |
-        mkdir extracted_files
         unzip browser_20241211_22126.zip -d extracted_files
 
     # 解凍したファイルをリポジトリに追加してコミットする

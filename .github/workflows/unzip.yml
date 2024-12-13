@@ -1,19 +1,36 @@
-# リポジトリのコードをチェックアウト
-- name: Checkout repository
-  uses: actions/checkout@v3
+name: Unzip and Commit
 
-# 現在の作業ディレクトリを確認
-- name: Check current directory
-  run: |
-    pwd
-    ls -l
+on:
+  push:
+    branches:
+      - main
 
-# extracted_filesディレクトリが存在しない場合に作成
-- name: Create extracted_files directory if it doesn't exist
-  run: |
-    mkdir -p extracted_files
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
 
-# ZIPファイルを解凍する
-- name: Extract ZIP file
-  run: |
-    unzip browser_20241211_22126.zip -d extracted_files
+    steps:
+    # リポジトリのコードをチェックアウト
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # extracted_filesディレクトリが存在しない場合に作成
+    - name: Create extracted_files directory if it doesn't exist
+      run: |
+        mkdir -p extracted_files
+
+    # ZIPファイルを解凍する
+    - name: Extract ZIP file
+      run: |
+        unzip browser_20241211_22126.zip -d extracted_files
+
+    # 解凍したファイルをリポジトリに追加してコミットする
+    - name: Commit extracted files
+      run: |
+        git config --local user.name "github-actions[bot]"
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git add .
+        git commit -m "Add extracted files" || echo "No changes to commit"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

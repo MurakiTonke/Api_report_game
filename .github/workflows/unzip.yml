@@ -22,7 +22,11 @@ jobs:
     # ZIPファイルを解凍する
     - name: Extract ZIP file
       run: |
+        # ZIPファイルがリポジトリのルートディレクトリにある場合
         unzip browser_20241211_22126.zip -d extracted_files
+
+        # ZIPファイルがサブディレクトリにある場合、以下のように修正
+        # unzip zip_files/browser_20241211_22126.zip -d extracted_files
 
     # 解凍したファイルをリポジトリに追加してコミットする
     - name: Commit extracted files
